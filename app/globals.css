@@ -35,6 +35,14 @@ body {
   line-height: 1.5;
 }
 
+.course-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
 .container {
   max-width: 600px;
   margin: 0 auto;

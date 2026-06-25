@@ -28,7 +28,7 @@ export default async function CoursesPage() {
       <h1>Courses</h1>
       <ul>
         {(courses ?? []).map((course) => (
-          <li key={course.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <li key={course.id} className="course-row">
             <div>
               <div className="item-title">{course.name}</div>
               <div className="item-due">{course.term}</div>
