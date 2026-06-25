@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { formatDueDate } from '@/lib/formatDate'
 
 type Item = {
   id: string
@@ -95,7 +96,7 @@ export default function ScheduleItemRow({ item, courses }: { item: Item; courses
     <li className={`type-${item.item_type}`}>
       <div className="item-course">{item.courses?.name}</div>
       <div className="item-title">{item.title} · {item.item_type}</div>
-      <div className="item-due">Due {new Date(item.due_at).toLocaleString()}</div>
+      <div className="item-due">Due {formatDueDate(item.due_at)}</div>
       <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
         <button
           type="button"

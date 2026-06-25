@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Nav from '@/components/Nav'
 import NotificationBanner from '@/components/NotificationBanner'
+import { formatDueDate } from '@/lib/formatDate'
 
 type ScheduleItem = {
   id: string
@@ -60,9 +61,7 @@ function Section({ title, items }: { title: string; items: ScheduleItem[] }) {
               {item.title} · {item.item_type}
             </div>
             <div className="item-due">
-              Due {new Date(item.due_at).toLocaleString(undefined, {
-                weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit',
-              })}
+              Due {formatDueDate(item.due_at)}
             </div>
           </li>
         ))}
