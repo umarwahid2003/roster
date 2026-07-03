@@ -24,26 +24,55 @@ export default async function AdminPage() {
     .select('id, title, item_type, due_at, course_id, courses(name)')
     .order('due_at', { ascending: true })
 
+  const coursesList = courses ?? []
+  const itemsList = items ?? []
+
   return (
     <main className="container">
       <Nav isAdmin={true} />
+      
       <h1>Add to the schedule</h1>
-      <AddItemForm courses={courses ?? []} />
 
-      <h2>Courses</h2>
-      <AddCourseForm />
-      <ul>
-        {(courses ?? []).map((c: any) => (
-          <li key={c.id}>
+      <h2 className="stagger-item" style={{ animationDelay: '150ms' } as React.CSSProperties}>
+        Schedule Items
+      </h2>
+      <div className="admin-card stagger-item" style={{ animationDelay: '200ms' } as React.CSSProperties}>
+        <AddItemForm courses={coursesList} />
+      </div>
+
+      <h2 className="stagger-item" style={{ animationDelay: '250ms' } as React.CSSProperties}>
+        Create Course
+      </h2>
+      <div className="admin-card stagger-item" style={{ animationDelay: '300ms' } as React.CSSProperties}>
+        <AddCourseForm />
+      </div>
+
+      <h2 className="stagger-item" style={{ animationDelay: '350ms' } as React.CSSProperties}>
+        Courses
+      </h2>
+      <ul style={{ marginBottom: 32 }}>
+        {coursesList.map((c: any, index: number) => (
+          <li
+            key={c.id}
+            className="stagger-item"
+            style={{ animationDelay: `${(index + 7) * 60}ms` } as React.CSSProperties}
+          >
             <div className="item-title">{c.name}</div>
           </li>
         ))}
       </ul>
 
-      <h2>Everything currently scheduled</h2>
+      <h2 className="stagger-item" style={{ animationDelay: '400ms' } as React.CSSProperties}>
+        Everything currently scheduled
+      </h2>
       <ul>
-        {(items ?? []).map((item: any) => (
-          <ScheduleItemRow key={item.id} item={item} courses={courses ?? []} />
+        {itemsList.map((item: any, index: number) => (
+          <ScheduleItemRow
+            key={item.id}
+            item={item}
+            courses={coursesList}
+            delay={`${(coursesList.length + index + 8) * 60}ms`}
+          />
         ))}
       </ul>
     </main>

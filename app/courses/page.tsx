@@ -25,16 +25,22 @@ export default async function CoursesPage() {
   return (
     <main className="container">
       <Nav isAdmin={profile?.role === 'admin'} />
+      
       <h1>Courses</h1>
+
       <ul>
-        {(courses ?? []).map((course) => (
-          <li key={course.id} className="course-row">
+        {(courses ?? []).map((course, index) => (
+          <li
+            key={course.id}
+            className="course-row stagger-item"
+            style={{ animationDelay: `${(index + 3) * 60}ms` } as React.CSSProperties}
+          >
             <div>
               <div className="item-title">{course.name}</div>
               <div className="item-due">{course.term}</div>
             </div>
             {joinedIds.has(course.id) ? (
-              <span className="muted">Joined</span>
+              <span className="muted" style={{ marginTop: 0 }}>Joined</span>
             ) : (
               <JoinButton courseId={course.id} />
             )}
@@ -44,3 +50,4 @@ export default async function CoursesPage() {
     </main>
   )
 }
+

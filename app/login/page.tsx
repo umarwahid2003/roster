@@ -2,8 +2,8 @@
 
 import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
+import Typewriter from '@/components/Typewriter'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -11,6 +11,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [info, setInfo] = useState('')
+  const [isIntroDone, setIsIntroDone] = useState(false)
 
   async function signIn(e: FormEvent) {
     e.preventDefault()
@@ -37,11 +38,12 @@ export default function LoginPage() {
 
   return (
     <main className="login-screen">
-      <div className="card">
-        <div className="brand" style={{ marginBottom: 32, borderRight: 'none', paddingRight: 0 }}>
-  <Image src="/icon-192.png" alt="Roster" width={56} height={56} />
-</div>
-        <h1 style={{ fontSize: 22, marginBottom: 20 }}>Sign in</h1>
+      <div className={`spotlight ${isIntroDone ? 'on' : ''}`}></div>
+      <div className="title-wordmark wordmark">
+        <Typewriter text="roster" speed={110} onDone={() => setIsIntroDone(true)} />
+      </div>
+      <div className={`tagline ${isIntroDone ? 'show' : ''}`}>never miss what's due</div>
+      <div className={`card ${isIntroDone ? 'reveal' : ''}`}>
         <form onSubmit={signIn}>
           <input
             type="email"
@@ -49,6 +51,7 @@ export default function LoginPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={!isIntroDone}
           />
           <input
             type="password"
@@ -56,15 +59,16 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={!isIntroDone}
           />
-          <button type="submit">Sign in</button>
+          <button type="submit" disabled={!isIntroDone}>Sign in</button>
         </form>
         <p className="muted">
           New here?{' '}
           <button
             type="button"
             onClick={signUp}
-            style={{ all: 'unset', textDecoration: 'underline', cursor: 'pointer' }}
+            disabled={!isIntroDone}
           >
             Create account
           </button>

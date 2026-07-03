@@ -22,7 +22,15 @@ function toLocalInputValue(iso: string) {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
-export default function ScheduleItemRow({ item, courses }: { item: Item; courses: Course[] }) {
+export default function ScheduleItemRow({
+  item,
+  courses,
+  delay,
+}: {
+  item: Item
+  courses: Course[]
+  delay?: string
+}) {
   const router = useRouter()
   const [editing, setEditing] = useState(false)
   const [title, setTitle] = useState(item.title)
@@ -62,7 +70,7 @@ export default function ScheduleItemRow({ item, courses }: { item: Item; courses
 
   if (editing) {
     return (
-      <li className={`type-${itemType}`}>
+      <li className={`type-${itemType} stagger-item`} style={{ animationDelay: delay }}>
         <select value={courseId} onChange={(e) => setCourseId(e.target.value)}>
           {courses.map((c) => (
             <option key={c.id} value={c.id}>{c.name}</option>
@@ -93,11 +101,14 @@ export default function ScheduleItemRow({ item, courses }: { item: Item; courses
   }
 
   return (
-    <li className={`type-${item.item_type}`}>
+    <li className={`type-${item.item_type} stagger-item`} style={{ animationDelay: delay }}>
       <div className="item-course">{item.courses?.name}</div>
-      <div className="item-title">{item.title} · {item.item_type}</div>
-      <div className="item-due">Due {formatDueDate(item.due_at)}</div>
-      <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
+      <div className="item-title">{item.title}</div>
+      <div className={`item-badge badge-${item.item_type}`}>
+        {item.item_type}
+      </div>
+      <div className="item-due" style={{ marginTop: 6 }}>Due {formatDueDate(item.due_at)}</div>
+      <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
         <button
           type="button"
           onClick={() => setEditing(true)}
