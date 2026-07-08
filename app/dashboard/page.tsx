@@ -49,8 +49,6 @@ export default async function DashboardPage() {
     <main className="container">
       <Nav isAdmin={profile?.role === 'admin'} />
       
-      <h1>Your schedule</h1>
-
       <DashboardSummaryText items={list} userId={user.id} />
 
       <div className="stagger-item" style={{ animationDelay: '250ms' } as React.CSSProperties}>

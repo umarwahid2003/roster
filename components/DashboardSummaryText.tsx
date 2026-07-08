@@ -56,11 +56,11 @@ export default function DashboardSummaryText({
     <div className="dashboard-text-summary stagger-item" style={{ animationDelay: '150ms' } as React.CSSProperties}>
       <div className="summary-text-line">
         <span className="summary-bullet bullet-assignment" />
-        <span>Assignments due (total): <strong className="highlight-count">{assignmentCount}</strong></span>
+        <span>Assignments due: <strong className="highlight-count">{assignmentCount}</strong></span>
       </div>
       <div className="summary-text-line">
         <span className="summary-bullet bullet-quiz" />
-        <span>Quizzes due (total): <strong className="highlight-count">{quizCount}</strong></span>
+        <span>Quizzes due: <strong className="highlight-count">{quizCount}</strong></span>
       </div>
     </div>
   )
