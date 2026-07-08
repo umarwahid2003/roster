@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import Nav from '@/components/Nav'
 import JoinButton from './JoinButton'
+import LeaveButton from './LeaveButton'
+
 
 export default async function CoursesPage() {
   const supabase = await createClient()
@@ -40,7 +42,7 @@ export default async function CoursesPage() {
               <div className="item-due">{course.term}</div>
             </div>
             {joinedIds.has(course.id) ? (
-              <span className="muted" style={{ marginTop: 0 }}>Joined</span>
+              <LeaveButton courseId={course.id} />
             ) : (
               <JoinButton courseId={course.id} />
             )}

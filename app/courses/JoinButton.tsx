@@ -14,5 +14,9 @@ export default function JoinButton({ courseId }: { courseId: string }) {
     router.refresh()
   }
 
-  return <button onClick={join}>Join</button>
+  return (
+    <button type="button" className="join-btn" onClick={join}>
+      Join
+    </button>
+  )
 }
