@@ -10,6 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isIntroDone, setIsIntroDone] = useState(false)
+  const [isDev, setIsDev] = useState(false)
 
   useEffect(() => {
     // Check if redirect returned an error parameter
@@ -17,6 +18,10 @@ export default function LoginPage() {
     const errMsg = params.get('error')
     if (errMsg) {
       setError(decodeURIComponent(errMsg))
+    }
+
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      setIsDev(true)
     }
   }, [])
 
@@ -33,6 +38,26 @@ export default function LoginPage() {
     if (error) {
       setError(error.message)
       setIsLoading(false)
+    }
+  }
+
+  async function signInDev(role: 'student' | 'admin') {
+    setIsLoading(true)
+    setError('')
+    const supabase = createClient()
+    const email = role === 'admin' ? 'admin@roster.test' : 'student@roster.test'
+    
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password: 'password123',
+    })
+
+    if (error) {
+      setError(error.message)
+      setIsLoading(false)
+    } else {
+      router.push('/dashboard')
+      router.refresh()
     }
   }
 
@@ -58,6 +83,32 @@ export default function LoginPage() {
           </svg>
           {isLoading ? 'Connecting...' : 'Continue with Google'}
         </button>
+
+        {isDev && (
+          <div className="dev-login-section" style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <span style={{ fontSize: 11, textTransform: 'uppercase', color: 'var(--muted)', letterSpacing: '0.05em', textAlign: 'center' }}>Local Dev Bypass</span>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <button
+                type="button"
+                className="status-pill status-in_progress"
+                style={{ flex: 1, justifyContent: 'center', cursor: 'inherit', padding: '10px 14px' }}
+                onClick={() => signInDev('student')}
+                disabled={isLoading}
+              >
+                Student Dev
+              </button>
+              <button
+                type="button"
+                className="status-pill status-submitted"
+                style={{ flex: 1, justifyContent: 'center', cursor: 'inherit', padding: '10px 14px' }}
+                onClick={() => signInDev('admin')}
+                disabled={isLoading}
+              >
+                Admin Dev
+              </button>
+            </div>
+          </div>
+        )}
 
         {error && <p className="error" style={{ marginTop: 16 }}>{error}</p>}
       </div>

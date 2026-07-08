@@ -71,6 +71,7 @@ export default function StatusDropdown({
     } else {
       localStorage.setItem(storageKey, newStatus)
     }
+    window.dispatchEvent(new Event('roster_status_change'))
   }
 
   // Helper to format visual labels

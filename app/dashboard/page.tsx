@@ -5,6 +5,8 @@ import Nav from '@/components/Nav'
 import NotificationBanner from '@/components/NotificationBanner'
 import { formatDueDate } from '@/lib/formatDate'
 import StatusDropdown from '@/components/StatusDropdown'
+import DashboardSummaryText from '@/components/DashboardSummaryText'
+
 
 type ScheduleItem = {
   id: string
@@ -41,14 +43,7 @@ export default async function DashboardPage() {
     .select('id, title, item_type, due_at, course_id, courses(id, name)')
     .order('due_at', { ascending: true })
 
-  const now = Date.now()
-  const weekFromNow = now + 7 * 24 * 60 * 60 * 1000
   const list = (items ?? []) as unknown as ScheduleItem[]
-  
-  const dashboardList = list.filter((i) => i.item_type !== 'exam')
-  const thisWeek = dashboardList.filter((i) => new Date(i.due_at).getTime() <= weekFromNow)
-  const later = dashboardList.filter((i) => new Date(i.due_at).getTime() > weekFromNow)
-  const exams = list.filter((i) => i.item_type === 'exam')
 
   return (
     <main className="container">
@@ -56,21 +51,7 @@ export default async function DashboardPage() {
       
       <h1>Your schedule</h1>
 
-      {/* Metrics Dashboard Summary Grid */}
-      <div className="dashboard-summary stagger-item" style={{ animationDelay: '150ms' } as React.CSSProperties}>
-        <div className="summary-card">
-          <span className="summary-number">{thisWeek.length}</span>
-          <span className="summary-label">Due this week</span>
-        </div>
-        <div className="summary-card">
-          <span className="summary-number">{later.length}</span>
-          <span className="summary-label">Due later</span>
-        </div>
-        <Link href="/exams" className="summary-card interactive-card">
-          <span className="summary-number">{exams.length}</span>
-          <span className="summary-label">Exams</span>
-        </Link>
-      </div>
+      <DashboardSummaryText items={list} userId={user.id} />
 
       <div className="stagger-item" style={{ animationDelay: '250ms' } as React.CSSProperties}>
         <NotificationBanner />
