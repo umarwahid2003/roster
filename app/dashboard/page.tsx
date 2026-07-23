@@ -7,6 +7,7 @@ import { formatDueDate } from '@/lib/formatDate'
 import StatusDropdown from '@/components/StatusDropdown'
 import DashboardSummaryText from '@/components/DashboardSummaryText'
 import { getCourseSlot } from '@/lib/courseSlots'
+import DisclaimerPopup from '@/components/DisclaimerPopup'
 
 
 type ScheduleItem = {
@@ -26,7 +27,7 @@ export default async function DashboardPage() {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('role, has_accepted_disclaimer')
     .eq('id', user.id)
     .single()
 
@@ -49,6 +50,7 @@ export default async function DashboardPage() {
 
   return (
     <main className="container">
+      {profile?.has_accepted_disclaimer === false && <DisclaimerPopup userId={user.id} />}
       <Nav isAdmin={profile?.role === 'admin'} />
       
       <DashboardSummaryText items={list} userId={user.id} />

@@ -19,10 +19,8 @@ export default async function AboutPage() {
   return (
     <main className="container">
       {user && <Nav isAdmin={isAdmin} />}
-      
+
       <div className="layout-brand" style={{ padding: '0px 0px 48px', maxWidth: '800px', margin: '0' }}>
-        <h1 style={{ fontSize: '36px', marginBottom: '32px' }}>About Roster</h1>
-        
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', fontSize: '15px', color: 'var(--text)', lineHeight: '1.6' }}>
           <p>
             Roster is built and maintained by a solo student developer, with one goal: help students stop missing deadlines.
@@ -42,14 +40,14 @@ export default async function AboutPage() {
           </div>
 
           <p>
-            More courses are being added regularly, with the goal of eventually covering every course offered at Iqra University — making Roster a one-stop hub for deadlines and material, for every student on campus.
+            More courses will be added soon, with the goal of eventually covering every course offered at Iqra University — making Roster a one-stop hub for deadlines and material, for every student on campus.
           </p>
 
           <p>
-            Found a bug, or have an idea to make this better? I'd genuinely like to hear it. <br/>
-            📧 <a href="mailto:umarwahid2003@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>umarwahid2003@gmail.com</a>
+            Found a bug, or have an idea to make this better? I'd genuinely like to hear it. <br />
+            📧 <a href="mailto:contactrosterapp@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>contactrosterapp@gmail.com</a>
           </p>
-          
+
           <div style={{ marginTop: '32px', padding: '24px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px' }}>
             <h2 style={{ marginTop: 0, color: 'var(--danger)', fontSize: '14px' }}>Disclaimer</h2>
             <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '16px' }}>
