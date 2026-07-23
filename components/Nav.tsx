@@ -18,6 +18,7 @@ export default function Nav({ isAdmin }: { isAdmin: boolean }) {
       <Link href="/dashboard">Dashboard</Link>
       <Link href="/exams">Exams</Link>
       <Link href="/courses">Courses</Link>
+      <Link href="/materials">Materials</Link>
       {isAdmin && <Link href="/admin">Admin</Link>}
       <button onClick={signOut}>Sign out</button>
     </nav>

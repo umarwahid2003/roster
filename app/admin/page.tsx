@@ -3,7 +3,9 @@ import { createClient } from '@/lib/supabase/server'
 import Nav from '@/components/Nav'
 import AddItemForm from './AddItemForm'
 import AddCourseForm from './AddCourseForm'
+import AddMaterialForm from './AddMaterialForm'
 import ScheduleItemRow from './ScheduleItemRow'
+import DeleteCourseButton from './DeleteCourseButton'
 
 export default async function AdminPage() {
   const supabase = await createClient()
@@ -48,6 +50,13 @@ export default async function AdminPage() {
       </div>
 
       <h2 className="stagger-item" style={{ animationDelay: '350ms' } as React.CSSProperties}>
+        Upload Material
+      </h2>
+      <div className="admin-card stagger-item" style={{ animationDelay: '400ms' } as React.CSSProperties}>
+        <AddMaterialForm courses={coursesList} />
+      </div>
+
+      <h2 className="stagger-item" style={{ animationDelay: '350ms' } as React.CSSProperties}>
         Courses
       </h2>
       <ul style={{ marginBottom: 32 }}>
@@ -57,7 +66,10 @@ export default async function AdminPage() {
             className="stagger-item"
             style={{ animationDelay: `${(index + 7) * 60}ms` } as React.CSSProperties}
           >
-            <div className="item-title">{c.name}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+              <div className="item-title">{c.name}</div>
+              <DeleteCourseButton courseId={c.id} />
+            </div>
           </li>
         ))}
       </ul>
