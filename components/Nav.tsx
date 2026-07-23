@@ -20,7 +20,10 @@ export default function Nav({ isAdmin }: { isAdmin: boolean }) {
       <Link href="/courses">Courses</Link>
       <Link href="/materials">Materials</Link>
       {isAdmin && <Link href="/admin">Admin</Link>}
-      <button onClick={signOut}>Sign out</button>
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <Link href="/about">About</Link>
+        <button onClick={signOut} style={{ margin: 0 }}>Sign out</button>
+      </div>
     </nav>
   )
 }

@@ -121,6 +121,11 @@ export default async function DashboardPage() {
           })}
         </div>
       )}
+
+      <footer style={{ marginTop: '64px', textAlign: 'center', fontSize: '12px', color: 'var(--muted)', borderTop: '1px solid var(--border)', paddingTop: '24px' }}>
+        <p style={{ margin: 0 }}>&copy; {new Date().getFullYear()} Roster. All rights reserved.</p>
+        <p style={{ margin: '8px 0 0 0' }}>For info see the <Link href="/about" style={{ color: 'var(--accent)', textDecoration: 'none' }}>About page</Link>.</p>
+      </footer>
     </main>
   )
 }
