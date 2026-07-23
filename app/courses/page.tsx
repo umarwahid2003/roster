@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server'
 import Nav from '@/components/Nav'
 import JoinButton from './JoinButton'
 import LeaveButton from './LeaveButton'
+import { getCourseSlot } from '@/lib/courseSlots'
 
 
 export default async function CoursesPage() {
@@ -39,7 +40,10 @@ export default async function CoursesPage() {
           >
             <div>
               <div className="item-title">{course.name}</div>
-              <div className="item-due">{course.term}</div>
+              <div className="item-due">
+                {course.term}
+                {getCourseSlot(course.name) && ` • ${getCourseSlot(course.name)}`}
+              </div>
             </div>
             {joinedIds.has(course.id) ? (
               <LeaveButton courseId={course.id} />

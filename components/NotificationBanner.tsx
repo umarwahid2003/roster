@@ -65,11 +65,7 @@ export default function NotificationBanner() {
   }
 
   if (status === 'on') {
-    return (
-      <div className="reminder-banner">
-        <span>Reminders are on for this device.</span>
-      </div>
-    )
+    return null
   }
 
   return (

@@ -83,12 +83,12 @@ export default async function MaterialsPage() {
                 <ul className="course-tasks-list">
                   {course.materials.map((mat) => (
                     <li key={mat.id} className="course-task-item type-other">
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                         <div>
                           <div className="item-title">{mat.title}</div>
                           <div className="item-due">{new Date(mat.created_at).toLocaleDateString()}</div>
                         </div>
-                        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                           <a 
                             href={mat.publicUrl} 
                             target="_blank" 

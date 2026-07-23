@@ -6,6 +6,7 @@ import NotificationBanner from '@/components/NotificationBanner'
 import { formatDueDate } from '@/lib/formatDate'
 import StatusDropdown from '@/components/StatusDropdown'
 import DashboardSummaryText from '@/components/DashboardSummaryText'
+import { getCourseSlot } from '@/lib/courseSlots'
 
 
 type ScheduleItem = {
@@ -73,7 +74,14 @@ export default async function DashboardPage() {
                 className="course-column stagger-item"
                 style={{ animationDelay: `${(index + 5) * 60}ms` } as React.CSSProperties}
               >
-                <h2 className="course-column-title">{course.name}</h2>
+                <h2 className="course-column-title" style={{ textAlign: 'center' }}>
+                  {course.name}
+                  {getCourseSlot(course.name) && (
+                    <span style={{ display: 'block', textAlign: 'center', fontSize: '11px', color: 'var(--muted)', marginTop: '4px', textTransform: 'none', letterSpacing: 'normal' }}>
+                      {getCourseSlot(course.name)}
+                    </span>
+                  )}
+                </h2>
                 {courseItems.length === 0 ? (
                   <p className="no-tasks">All caught up!</p>
                 ) : (
