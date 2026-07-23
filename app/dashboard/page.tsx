@@ -15,6 +15,7 @@ type ScheduleItem = {
   item_type: string
   due_at: string
   course_id: string
+  file_path?: string | null
   courses: { id: string; name: string } | null
 }
 
@@ -41,7 +42,7 @@ export default async function DashboardPage() {
   // Fetch schedule items
   const { data: items } = await supabase
     .from('schedule_items')
-    .select('id, title, item_type, due_at, course_id, courses(id, name)')
+    .select('id, title, item_type, due_at, course_id, file_path, courses(id, name)')
     .order('due_at', { ascending: true })
 
   const list = (items ?? []) as unknown as ScheduleItem[]
@@ -93,6 +94,16 @@ export default async function DashboardPage() {
                       >
                         <div className="item-title" style={{ fontWeight: 600, fontSize: '14px', wordBreak: 'break-word' }}>
                           {item.title}
+                          {item.file_path && (
+                            <a 
+                              href={supabase.storage.from('materials').getPublicUrl(item.file_path).data.publicUrl} 
+                              target="_blank" 
+                              rel="noopener noreferrer" 
+                              style={{ display: 'block', marginTop: 4, fontSize: 12, color: 'var(--accent)', textDecoration: 'underline' }}
+                            >
+                              Download Attachment
+                            </a>
+                          )}
                         </div>
                         <div className={`item-badge badge-${item.item_type}`}>
                           {item.item_type}

@@ -12,26 +12,55 @@ export default function AddItemForm({ courses }: { courses: Course[] }) {
   const [title, setTitle] = useState('')
   const [itemType, setItemType] = useState('assignment')
   const [dueAt, setDueAt] = useState('')
+  const [file, setFile] = useState<File | null>(null)
   const [error, setError] = useState('')
+  const [isUploading, setIsUploading] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
+    setIsUploading(true)
     const supabase = createClient()
     const { data: { user } } = await supabase.auth.getUser()
-    const { error } = await supabase.from('schedule_items').insert({
+
+    let filePath = null
+
+    if (file) {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`
+      const uploadPath = `assignments/${courseId}/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('materials')
+        .upload(uploadPath, file)
+
+      if (uploadError) {
+        setError(`Upload failed: ${uploadError.message}`)
+        setIsUploading(false)
+        return
+      }
+      filePath = uploadPath
+    }
+
+    const { error: dbError } = await supabase.from('schedule_items').insert({
       course_id: courseId,
       title,
       item_type: itemType,
       due_at: new Date(dueAt).toISOString(),
       created_by: user?.id,
+      file_path: filePath
     })
-    if (error) {
-      setError(error.message)
+    
+    if (dbError) {
+      setError(`Database error: ${dbError.message}`)
+      setIsUploading(false)
       return
     }
+    
     setTitle('')
     setDueAt('')
+    setFile(null)
+    setIsUploading(false)
     router.refresh()
   }
 
@@ -62,7 +91,17 @@ export default function AddItemForm({ courses }: { courses: Course[] }) {
         onChange={(e) => setDueAt(e.target.value)}
         required
       />
-      <button type="submit">Add to schedule</button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <label style={{ fontSize: '12px', color: 'var(--muted)', paddingLeft: '2px' }}>Attachment (Optional)</label>
+        <input
+          type="file"
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+          accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip"
+        />
+      </div>
+      <button type="submit" disabled={isUploading}>
+        {isUploading ? 'Adding...' : 'Add to schedule'}
+      </button>
       {error && <p className="error">{error}</p>}
     </form>
   )

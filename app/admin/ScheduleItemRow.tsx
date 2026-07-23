@@ -11,6 +11,7 @@ type Item = {
   item_type: string
   due_at: string
   course_id: string
+  file_path?: string | null
   courses: { name: string } | null
 }
 
@@ -64,9 +65,17 @@ export default function ScheduleItemRow({
   async function remove() {
     if (!confirm(`Delete "${item.title}"? This can't be undone.`)) return
     const supabase = createClient()
+    
+    if (item.file_path) {
+      await supabase.storage.from('materials').remove([item.file_path])
+    }
+
     await supabase.from('schedule_items').delete().eq('id', item.id)
     router.refresh()
   }
+
+  const supabase = createClient()
+  const publicUrl = item.file_path ? supabase.storage.from('materials').getPublicUrl(item.file_path).data.publicUrl : null
 
   if (editing) {
     return (
@@ -103,7 +112,14 @@ export default function ScheduleItemRow({
   return (
     <li className={`type-${item.item_type} stagger-item`} style={{ animationDelay: delay }}>
       <div className="item-course">{item.courses?.name}</div>
-      <div className="item-title">{item.title}</div>
+      <div className="item-title">
+        {item.title}
+        {publicUrl && (
+          <a href={publicUrl} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 8, fontSize: 12, color: 'var(--accent)', textDecoration: 'underline' }}>
+            Download Attachment
+          </a>
+        )}
+      </div>
       <div className={`item-badge badge-${item.item_type}`}>
         {item.item_type}
       </div>
