@@ -50,7 +50,7 @@ export default async function DashboardPage() {
 
   return (
     <main className="container">
-      {profile?.has_accepted_disclaimer === false && <DisclaimerPopup userId={user.id} />}
+      {(profile as any)?.has_accepted_disclaimer === false && <DisclaimerPopup userId={user.id} />}
       <Nav isAdmin={profile?.role === 'admin'} />
       
       <DashboardSummaryText items={list} userId={user.id} />
