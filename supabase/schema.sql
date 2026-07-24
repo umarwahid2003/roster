@@ -67,6 +67,11 @@ create policy "Admins can manage courses" on public.courses
 create policy "Users can view their own memberships" on public.course_memberships
   for select using (auth.uid() = user_id);
 
+create policy "Admins can view all memberships" on public.course_memberships
+  for select using (
+    exists (select 1 from public.profiles p where p.id = auth.uid() and p.role = 'admin')
+  );
+
 create policy "Users can join courses" on public.course_memberships
   for insert with check (auth.uid() = user_id);
 
