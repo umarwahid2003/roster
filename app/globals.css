@@ -1162,6 +1162,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     font-size: 58px !important;
     min-height: 66px !important;
     margin-top: 0;
+    width: max-content;
   }
   .container {
     padding-top: 48px !important;
