@@ -35,6 +35,7 @@ export default async function DashboardPage() {
   const { data: memberships } = await supabase
     .from('course_memberships')
     .select('course_id, courses(id, name)')
+    .eq('user_id', user.id)
 
   const joinedCourses = (memberships ?? [])
     .map((m: any) => m.courses)
@@ -70,7 +71,9 @@ export default async function DashboardPage() {
       ) : (
         <div className="dashboard-grid">
           {joinedCourses.map((course, index) => {
+            const courseExams = list.filter((i) => i.course_id === course.id && i.item_type === 'exam')
             const courseItems = list.filter((i) => i.course_id === course.id && i.item_type !== 'exam')
+            const allCourseItems = [...courseExams, ...courseItems]
             return (
               <div
                 key={course.id}
@@ -85,11 +88,11 @@ export default async function DashboardPage() {
                     </span>
                   )}
                 </h2>
-                {courseItems.length === 0 ? (
+                {allCourseItems.length === 0 ? (
                   <p className="no-tasks">All caught up!</p>
                 ) : (
                   <ul className="course-tasks-list">
-                    {courseItems.map((item) => (
+                    {allCourseItems.map((item) => (
                       <li
                         key={item.id}
                         className={`type-${item.item_type} course-task-item`}
@@ -101,19 +104,24 @@ export default async function DashboardPage() {
                               href={supabase.storage.from('materials').getPublicUrl(item.file_path).data.publicUrl} 
                               target="_blank" 
                               rel="noopener noreferrer" 
-                              style={{ display: 'block', marginTop: 4, fontSize: 12, color: 'var(--accent)', textDecoration: 'underline' }}
+                              className="download-attachment-link"
+                              style={{ marginTop: 4, fontSize: 12 }}
                             >
                               Download Attachment
                             </a>
                           )}
                         </div>
-                        <div className={`item-badge badge-${item.item_type}`}>
-                          {item.item_type}
-                        </div>
+                        {item.item_type === 'exam' && (
+                          <div className={`item-badge badge-${item.item_type}`}>
+                            {item.item_type}
+                          </div>
+                        )}
                         <div className="item-due" style={{ marginTop: 4, fontSize: '11px', color: 'var(--muted)' }}>
                           Due {formatDueDate(item.due_at)}
                         </div>
-                        <StatusDropdown itemId={item.id} userId={user.id} />
+                        {item.item_type !== 'exam' && (
+                          <StatusDropdown itemId={item.id} userId={user.id} />
+                        )}
                       </li>
                     ))}
                   </ul>

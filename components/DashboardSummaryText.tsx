@@ -16,11 +16,13 @@ export default function DashboardSummaryText({
 }) {
   const [assignmentCount, setAssignmentCount] = useState(0)
   const [quizCount, setQuizCount] = useState(0)
+  const [examCount, setExamCount] = useState(0)
 
   useEffect(() => {
     const calculateCounts = () => {
       let assignments = 0
       let quizzes = 0
+      let exams = 0
 
       items.forEach((item) => {
         if (item.item_type === 'assignment') {
@@ -32,11 +34,14 @@ export default function DashboardSummaryText({
           }
         } else if (item.item_type === 'quiz') {
           quizzes++
+        } else if (item.item_type === 'exam') {
+          exams++
         }
       })
 
       setAssignmentCount(assignments)
       setQuizCount(quizzes)
+      setExamCount(exams)
     }
 
     calculateCounts()
@@ -54,6 +59,12 @@ export default function DashboardSummaryText({
 
   return (
     <div className="dashboard-text-summary stagger-item" style={{ animationDelay: '150ms' } as React.CSSProperties}>
+      {examCount > 0 && (
+        <div className="summary-text-line">
+          <span className="summary-bullet bullet-exam" />
+          <span>Exams upcoming: <strong className="highlight-count">{examCount}</strong></span>
+        </div>
+      )}
       <div className="summary-text-line">
         <span className="summary-bullet bullet-assignment" />
         <span>Assignments due: <strong className="highlight-count">{assignmentCount}</strong></span>

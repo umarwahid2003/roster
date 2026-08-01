@@ -15,10 +15,11 @@ type Item = {
   courses: { name: string } | null
 }
 
-type Course = { id: string; name: string }
+type Course = { id: string; name: string; term?: string }
 
 function toLocalInputValue(iso: string) {
-  const d = new Date(iso)
+  const utcIso = iso.endsWith('Z') || iso.includes('+') ? iso : `${iso}Z`
+  const d = new Date(utcIso)
   const pad = (n: number) => String(n).padStart(2, '0')
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
@@ -82,7 +83,7 @@ export default function ScheduleItemRow({
       <li className={`type-${itemType} stagger-item`} style={{ animationDelay: delay }}>
         <select value={courseId} onChange={(e) => setCourseId(e.target.value)}>
           {courses.map((c) => (
-            <option key={c.id} value={c.id}>{c.name}</option>
+            <option key={c.id} value={c.id}>{c.name}{c.term ? ` (${c.term})` : ''}</option>
           ))}
         </select>
         <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -115,14 +116,16 @@ export default function ScheduleItemRow({
       <div className="item-title">
         {item.title}
         {publicUrl && (
-          <a href={publicUrl} target="_blank" rel="noopener noreferrer" style={{ marginLeft: 8, fontSize: 12, color: 'var(--accent)', textDecoration: 'underline' }}>
+          <a href={publicUrl} target="_blank" rel="noopener noreferrer" className="download-attachment-link" style={{ marginLeft: 8, fontSize: 12 }}>
             Download Attachment
           </a>
         )}
       </div>
-      <div className={`item-badge badge-${item.item_type}`}>
-        {item.item_type}
-      </div>
+      {item.item_type === 'exam' && (
+        <div className={`item-badge badge-${item.item_type}`}>
+          {item.item_type}
+        </div>
+      )}
       <div className="item-due" style={{ marginTop: 6 }}>Due {formatDueDate(item.due_at)}</div>
       <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
         <button

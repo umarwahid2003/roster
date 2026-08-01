@@ -20,7 +20,7 @@ export default async function AdminPage() {
 
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: courses } = await supabase.from('courses').select('id, name, course_memberships(count)')
+  const { data: courses } = await supabase.from('courses').select('id, name, term, course_memberships(count)')
   const { data: items } = await supabase
     .from('schedule_items')
     .select('id, title, item_type, due_at, course_id, courses(name), file_path')
@@ -68,7 +68,7 @@ export default async function AdminPage() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
               <div className="item-title" style={{ display: 'flex', flexDirection: 'column' }}>
-                <span>{c.name}</span>
+                <span>{c.name}{c.term ? ` (${c.term})` : ''}</span>
                 <span style={{ fontSize: '0.85rem', opacity: 0.7, fontWeight: 'normal', marginTop: '4px' }}>
                   {c.course_memberships?.[0]?.count || 0} student{c.course_memberships?.[0]?.count === 1 ? '' : 's'} enrolled
                 </span>

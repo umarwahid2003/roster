@@ -4,7 +4,7 @@ import { useState, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-type Course = { id: string; name: string }
+type Course = { id: string; name: string; term?: string }
 
 export default function AddItemForm({ courses }: { courses: Course[] }) {
   const router = useRouter()
@@ -68,7 +68,7 @@ export default function AddItemForm({ courses }: { courses: Course[] }) {
     <form onSubmit={handleSubmit}>
       <select value={courseId} onChange={(e) => setCourseId(e.target.value)}>
         {courses.map((c) => (
-          <option key={c.id} value={c.id}>{c.name}</option>
+          <option key={c.id} value={c.id}>{c.name}{c.term ? ` (${c.term})` : ''}</option>
         ))}
       </select>
       <input

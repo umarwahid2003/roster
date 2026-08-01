@@ -546,6 +546,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   box-shadow: 0 0 10px rgba(160, 138, 92, 0.5);
 }
 
+.summary-bullet.bullet-exam {
+  background-color: var(--type-exam);
+  box-shadow: 0 0 10px rgba(160, 92, 92, 0.5);
+}
+
 .highlight-count {
   font-family: var(--font-space-grotesk), "Space Grotesk", sans-serif;
   font-size: 17px;
@@ -1127,4 +1132,44 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .leave-btn:active, .join-btn:active {
   transform: scale(0.98) !important;
+}
+
+.download-attachment-link {
+  display: inline-block;
+  color: var(--accent);
+  text-decoration: underline;
+  transition: all 0.2s ease;
+}
+
+.download-attachment-link:hover {
+  font-weight: 600;
+  color: var(--text);
+  transform: scale(1.02);
+}
+
+@media (min-width: 768px) {
+  .layout-brand {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    height: 0;
+    pointer-events: none;
+    /* padding: 48px 20px 0px; is already inherited from default */
+  }
+  .layout-brand .title-wordmark {
+    pointer-events: auto;
+    font-size: 58px !important;
+    min-height: 66px !important;
+    margin-top: 0;
+  }
+  .container {
+    padding-top: 48px !important;
+  }
+  .container nav {
+    padding-left: 210px;
+    min-height: 66px;
+    align-items: flex-end;
+    padding-bottom: 12px;
+  }
 }

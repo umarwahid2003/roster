@@ -1,5 +1,6 @@
 export function formatDueDate(iso: string) {
-  return new Date(iso).toLocaleString('en-US', {
+  const utcIso = iso.endsWith('Z') || iso.includes('+') ? iso : `${iso}Z`
+  return new Date(utcIso).toLocaleString('en-US', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
