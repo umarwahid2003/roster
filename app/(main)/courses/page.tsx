@@ -11,23 +11,20 @@ export default async function CoursesPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  const { data: courses } = await supabase.from('courses').select('id, name, term')
-  const { data: memberships } = await supabase
-    .from('course_memberships')
-    .select('course_id')
-    .eq('user_id', user.id)
+  const [
+    { data: profile },
+    { data: courses },
+    { data: memberships }
+  ] = await Promise.all([
+    supabase.from('profiles').select('role').eq('id', user.id).single(),
+    supabase.from('courses').select('id, name, term'),
+    supabase.from('course_memberships').select('course_id').eq('user_id', user.id)
+  ])
 
   const joinedIds = new Set((memberships ?? []).map((m) => m.course_id))
 
   return (
-    <main className="container">
-      <Nav isAdmin={profile?.role === 'admin'} />
+    <>
       
       <h1>Courses</h1>
 
@@ -53,7 +50,7 @@ export default async function CoursesPage() {
           </li>
         ))}
       </ul>
-    </main>
+    </>
   )
 }
 

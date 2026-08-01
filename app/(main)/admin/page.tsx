@@ -20,18 +20,19 @@ export default async function AdminPage() {
 
   if (profile?.role !== 'admin') redirect('/dashboard')
 
-  const { data: courses } = await supabase.from('courses').select('id, name, term, course_memberships(count)')
-  const { data: items } = await supabase
-    .from('schedule_items')
-    .select('id, title, item_type, due_at, course_id, courses(name), file_path')
-    .order('due_at', { ascending: true })
+  const [
+    { data: courses },
+    { data: items }
+  ] = await Promise.all([
+    supabase.from('courses').select('id, name, term, course_memberships(count)'),
+    supabase.from('schedule_items').select('id, title, item_type, due_at, course_id, courses(name), file_path').order('due_at', { ascending: true })
+  ])
 
   const coursesList = courses ?? []
   const itemsList = items ?? []
 
   return (
-    <main className="container">
-      <Nav isAdmin={true} />
+    <>
       
       <h1>Add to the schedule</h1>
 
@@ -92,6 +93,6 @@ export default async function AdminPage() {
           />
         ))}
       </ul>
-    </main>
+    </>
   )
 }

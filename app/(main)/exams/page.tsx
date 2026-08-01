@@ -15,18 +15,13 @@ export default async function ExamsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  // Fetch exams sorted chronologically
-  const { data: items } = await supabase
-    .from('schedule_items')
-    .select('id, title, item_type, due_at, courses(name)')
-    .eq('item_type', 'exam')
-    .order('due_at', { ascending: true })
+  const [
+    { data: profile },
+    { data: items }
+  ] = await Promise.all([
+    supabase.from('profiles').select('role').eq('id', user.id).single(),
+    supabase.from('schedule_items').select('id, title, item_type, due_at, courses(name)').eq('item_type', 'exam').order('due_at', { ascending: true })
+  ])
 
   const exams = (items ?? []) as unknown as ExamItem[]
 
@@ -44,8 +39,7 @@ export default async function ExamsPage() {
   }
 
   return (
-    <main className="container">
-      <Nav isAdmin={profile?.role === 'admin'} />
+    <>
       
       <h1>Exam Timetable</h1>
 
@@ -88,6 +82,6 @@ export default async function ExamsPage() {
           })}
         </div>
       )}
-    </main>
+    </>
   )
 }

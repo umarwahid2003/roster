@@ -8,19 +8,15 @@ export default async function MaterialsPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
+  const [
+    { data: profile },
+    { data: memberships }
+  ] = await Promise.all([
+    supabase.from('profiles').select('role').eq('id', user.id).single(),
+    supabase.from('course_memberships').select('course_id, courses(name)').eq('user_id', user.id)
+  ])
 
   const isAdmin = profile?.role === 'admin'
-
-  // Fetch courses user has joined
-  const { data: memberships } = await supabase
-    .from('course_memberships')
-    .select('course_id, courses(name)')
-    .eq('user_id', user.id)
   
   const courseIds = (memberships ?? []).map(m => m.course_id)
   
@@ -65,8 +61,7 @@ export default async function MaterialsPage() {
   })
 
   return (
-    <main className="container">
-      <Nav isAdmin={isAdmin} />
+    <>
       
       <h1>Course Materials</h1>
 
@@ -111,6 +106,6 @@ export default async function MaterialsPage() {
           ))}
         </div>
       )}
-    </main>
+    </>
   )
 }

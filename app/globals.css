@@ -1174,3 +1174,13 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
     padding-bottom: 12px;
   }
 }
+/* Premium Glassmorphism Loader */
+.premium-loader-container { display: flex; justify-content: center; align-items: center; padding: 120px 20px; }
+.premium-loader { position: relative; width: 64px; height: 64px; }
+.premium-loader-ring { position: absolute; inset: 0; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--accent); border-right-color: var(--accent); animation: premium-spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite; }
+.premium-loader-ring:nth-child(2) { inset: 8px; border-top-color: var(--accent-hover); border-right-color: var(--accent-hover); animation-duration: 1.5s; animation-direction: reverse; }
+.premium-loader-ring:nth-child(3) { inset: 16px; border-top-color: var(--text); border-right-color: var(--text); animation-duration: 0.9s; }
+.premium-loader-core { position: absolute; inset: 24px; background: var(--text); border-radius: 50%; box-shadow: 0 0 12px var(--accent-glow); animation: premium-pulse 2s ease-in-out infinite alternate; }
+@keyframes premium-spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes premium-pulse { 0% { transform: scale(0.8); opacity: 0.5; box-shadow: 0 0 8px var(--accent-glow); } 100% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 24px var(--accent); } }
+

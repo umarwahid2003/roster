@@ -25,34 +25,25 @@ export default async function DashboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('role')
-    .eq('id', user.id)
-    .single()
-
-  // Fetch the courses the user has joined
-  const { data: memberships } = await supabase
-    .from('course_memberships')
-    .select('course_id, courses(id, name)')
-    .eq('user_id', user.id)
+  const [
+    { data: profile },
+    { data: memberships },
+    { data: items }
+  ] = await Promise.all([
+    supabase.from('profiles').select('role').eq('id', user.id).single(),
+    supabase.from('course_memberships').select('course_id, courses(id, name)').eq('user_id', user.id),
+    supabase.from('schedule_items').select('id, title, item_type, due_at, course_id, file_path, courses(id, name)').order('due_at', { ascending: true })
+  ])
 
   const joinedCourses = (memberships ?? [])
     .map((m: any) => m.courses)
     .filter(Boolean) as { id: string; name: string }[]
 
-  // Fetch schedule items
-  const { data: items } = await supabase
-    .from('schedule_items')
-    .select('id, title, item_type, due_at, course_id, file_path, courses(id, name)')
-    .order('due_at', { ascending: true })
-
   const list = (items ?? []) as unknown as ScheduleItem[]
 
   return (
-    <main className="container">
+    <>
 
-      <Nav isAdmin={profile?.role === 'admin'} />
       
       <DashboardSummaryText items={list} userId={user.id} />
 
@@ -136,6 +127,6 @@ export default async function DashboardPage() {
         <p style={{ margin: 0 }}>&copy; {new Date().getFullYear()} Roster. All rights reserved.</p>
         <p style={{ margin: '8px 0 0 0' }}>For info see the <Link href="/about" style={{ color: 'var(--accent)', textDecoration: 'none' }}>About page</Link>.</p>
       </footer>
-    </main>
+    </>
   )
 }
