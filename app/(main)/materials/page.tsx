@@ -27,7 +27,7 @@ export default async function MaterialsPage() {
       .from('course_materials')
       .select('id, course_id, title, file_path, created_at')
       .in('course_id', courseIds)
-      .order('created_at', { ascending: false })
+      .order('created_at', { ascending: true })
     
     materials = data ?? []
   }
@@ -70,37 +70,44 @@ export default async function MaterialsPage() {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
           {materialsWithUrls.map((course, index) => (
-            <div key={index} className="stagger-item" style={{ animationDelay: `${(index + 3) * 60}ms` } as React.CSSProperties}>
-              <h2 style={{ marginTop: 0 }}>{course.courseName}</h2>
+            <div key={index} className="admin-card stagger-item" style={{ animationDelay: `${(index + 3) * 60}ms`, marginBottom: 0 } as React.CSSProperties}>
+              <h2 style={{ marginTop: 0, borderBottom: '1px solid var(--border)', paddingBottom: '12px', marginBottom: '16px' }}>
+                {course.courseName}
+              </h2>
               {course.materials.length === 0 ? (
-                <p className="no-tasks">No materials uploaded for this course yet.</p>
+                <p className="no-tasks" style={{ margin: 0 }}>No materials uploaded for this course yet.</p>
               ) : (
-                <ul className="course-tasks-list">
-                  {course.materials.map((mat) => (
-                    <li key={mat.id} className="course-task-item type-other">
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                        <div>
-                          <div className="item-title">{mat.title}</div>
-                          <div className="item-due">{new Date(mat.created_at).toLocaleDateString()}</div>
-                        </div>
-                        <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                          <a 
-                            href={mat.publicUrl} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="join-btn"
-                            style={{ textDecoration: 'none', display: 'inline-block' }}
-                          >
-                            Download
-                          </a>
-                          {isAdmin && (
-                            <DeleteMaterialButton materialId={mat.id} filePath={mat.file_path} />
-                          )}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {course.materials.map((mat, i) => (
+                    <div 
+                      key={mat.id} 
+                      className="material-row"
+                      style={{ 
+                        borderBottom: i < course.materials.length - 1 ? '1px solid var(--border)' : 'none' 
+                      }}
+                    >
+                      <div>
+                        <div style={{ fontWeight: 500, fontSize: '15px', color: 'var(--text)' }}>{mat.title}</div>
+                        <div style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
+                          Added {new Date(mat.created_at).toLocaleDateString()}
                         </div>
                       </div>
-                    </li>
+                      <div className="material-row-actions">
+                        <a 
+                          href={mat.publicUrl} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '14px', fontWeight: 600 }}
+                        >
+                          Download
+                        </a>
+                        {isAdmin && (
+                          <DeleteMaterialButton materialId={mat.id} filePath={mat.file_path} />
+                        )}
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               )}
             </div>
           ))}

@@ -5,7 +5,7 @@ import Nav from '@/components/Nav'
 import NotificationBanner from '@/components/NotificationBanner'
 import { formatDueDate } from '@/lib/formatDate'
 import StatusDropdown from '@/components/StatusDropdown'
-import DashboardSummaryText from '@/components/DashboardSummaryText'
+
 import { getCourseSlot } from '@/lib/courseSlots'
 
 
@@ -45,7 +45,7 @@ export default async function DashboardPage() {
     <>
 
       
-      <DashboardSummaryText items={list} userId={user.id} />
+
 
       <div className="stagger-item" style={{ animationDelay: '250ms' } as React.CSSProperties}>
         <NotificationBanner />
@@ -110,7 +110,7 @@ export default async function DashboardPage() {
                         <div className="item-due" style={{ marginTop: 4, fontSize: '11px', color: 'var(--muted)' }}>
                           Due {formatDueDate(item.due_at)}
                         </div>
-                        {item.item_type !== 'exam' && (
+                        {item.item_type !== 'exam' && item.item_type !== 'quiz' && (
                           <StatusDropdown itemId={item.id} userId={user.id} />
                         )}
                       </li>

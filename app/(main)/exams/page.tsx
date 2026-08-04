@@ -27,14 +27,30 @@ export default async function ExamsPage() {
 
   // Helper function to format date for the calendar visual widget
   function getCalendarParts(dateStr: string) {
-    const d = new Date(dateStr)
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const utcIso = dateStr.endsWith('Z') || dateStr.includes('+') ? dateStr : `${dateStr}Z`
+    const d = new Date(utcIso)
+    
+    const formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'Asia/Karachi',
+      month: 'short',
+      day: 'numeric',
+      weekday: 'long',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true
+    })
+    
+    const parts = formatter.formatToParts(d)
+    const p = parts.reduce((acc, part) => {
+      acc[part.type] = part.value
+      return acc
+    }, {} as Record<string, string>)
+
     return {
-      month: months[d.getMonth()],
-      dayNum: d.getDate(),
-      dayName: days[d.getDay()],
-      time: d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      month: p.month.toUpperCase(),
+      dayNum: p.day,
+      dayName: p.weekday,
+      time: `${p.hour}:${p.minute} ${p.dayPeriod}`
     }
   }
 

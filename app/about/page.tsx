@@ -22,6 +22,16 @@ export default async function AboutPage() {
 
       <div className="layout-brand" style={{ padding: '0px 0px 48px', maxWidth: '800px', margin: '0' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', fontSize: '15px', color: 'var(--text)', lineHeight: '1.6' }}>
+          <div style={{ marginBottom: '8px', padding: '28px', background: 'rgba(17, 19, 23, 0.6)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: '24px', boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)' }}>
+            <h2 style={{ marginTop: 0, color: 'var(--danger)', fontSize: '14px' }}>Disclaimer</h2>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '16px', lineHeight: '1.6' }}>
+              Roster is an independent, student-built project and is not affiliated with, endorsed by, or officially connected to Iqra University or its administration in any way. All course materials shared through the app are provided by students for peer use and are not officially distributed or verified by the university.
+            </p>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0, lineHeight: '1.6' }}>
+              Roster is provided as-is, with no guarantee of uptime, accuracy, or completeness of deadline data — always cross-check critical deadlines against official university sources (LMS, course instructor, or department notices). The developer is not responsible for missed deadlines resulting from app errors, notification delays, or outdated course material.
+            </p>
+          </div>
+
           <p>
             Roster is built and maintained by a solo student developer, with one goal: help students stop missing deadlines.
           </p>
@@ -47,16 +57,6 @@ export default async function AboutPage() {
             Found a bug, or have an idea to make this better? I'd genuinely like to hear it. <br />
             📧 <a href="mailto:contactrosterapp@gmail.com" style={{ color: 'var(--accent)', textDecoration: 'none' }}>contactrosterapp@gmail.com</a>
           </p>
-
-          <div style={{ marginTop: '32px', padding: '24px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '8px' }}>
-            <h2 style={{ marginTop: 0, color: 'var(--danger)', fontSize: '14px' }}>Disclaimer</h2>
-            <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '16px' }}>
-              Roster is an independent, student-built project and is not affiliated with, endorsed by, or officially connected to Iqra University or its administration in any way. All course materials shared through the app are provided by students for peer use and are not officially distributed or verified by the university.
-            </p>
-            <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0 }}>
-              Roster is provided as-is, with no guarantee of uptime, accuracy, or completeness of deadline data — always cross-check critical deadlines against official university sources (LMS, course instructor, or department notices). The developer is not responsible for missed deadlines resulting from app errors, notification delays, or outdated course material.
-            </p>
-          </div>
         </div>
       </div>
     </main>
