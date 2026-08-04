@@ -710,6 +710,22 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   background: rgba(46, 117, 89, 0.12) !important;
   color: #52c48a !important;
   border-color: rgba(46, 117, 89, 0.3) !important;
+}
+
+.status-pill.status-submitted .status-dot {
+  background: #4ade80 !important;
+}
+
+.reminder-banner button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
 .reminder-banner button:hover {
   color: var(--text);
   border-color: var(--muted);
